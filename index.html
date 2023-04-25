@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"> 
+  
+  <meta property="og:title" content="GestureDiffuCLIP: Gesture Diffusion Model with CLIP Latents"/>
+  <meta property="og:url" content=""/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <title>GestureDiffuCLIP</title>
+  
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EWRYSDM25P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EWRYSDM25P');
+</script>
+  
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+  <link rel="icon" href="static/figures/icon2.png">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+
+<body>
+
+
+<section class="publication-header">
+  <div class="hero-body">
+    <div class="container is-max-widescreen">
+      <!-- <div class="columns is-centered"> -->
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">GestureDiffuCLIP: Gesture Diffusion Model with CLIP Latents</h1>
+        </div>
+    </div>
+  </div>
+
+</section>
+
+<section class="publication-author-block">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://aubrey-ao.github.io/" target="_blank">Tenglong Ao</a><sup>1</sup>,</span>
+            <span class="author-block">Zeyi Zhang</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://libliu.info/" target="_blank">Libin Liu</a><sup>1,2</sup></span>
+
+            
+            
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Peking University, China<sup>1</sup>,</span> 
+            <span class="author-block"> National Key Lab of Genaral AI, China<sup>2</sup></span> 
+            <!-- <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span> -->
+          </div>
+          
+
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2303.14613" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+
+              
+              <!-- Colab Link. -->
+              <span class="link-block">
+                <a href="None" target="_blank"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Code: Coming Soon</span>
+              </a>
+
+              </span>
+
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=Psi1IOZGq8c"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+
+              <!-- </span> -->
+              <!-- Colab Link. -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+
+      <div class="column is-centered has-text-centered">
+        <img src="static/figures/teaser.png" alt="cars peace"/>
+      </div>
+     
+      <h2 class="subtitle has-text-centered">
+        </span> GestureDiffuCLIP synthesized stylized gestures conditioned on four different text prompts.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            The automatic generation of stylized co-speech gestures has recently received increasing 
+            attention. Previous systems typically allow style control via predefined text labels or example
+             motion clips, which are often not flexible enough to convey user intent accurately. In this work, 
+             we present GestureDiffuCLIP, a neural network framework for synthesizing realistic, stylized co-speech 
+             gestures with flexible style control. We leverage the power of the large-scale Contrastive-Language-Image-Pre-training (CLIP) 
+             model and present a novel CLIP-guided mechanism that extracts efficient style representations from multiple input modalities, 
+             such as a piece of text, an example motion clip, or a video. Our system learns a latent diffusion model to generate high-quality 
+             gestures and infuses the CLIP representations of style into the generator via an adaptive instance normalization (AdaIN) layer. 
+             We further devise a gesture-transcript alignment mechanism that ensures a semantically correct gesture generation based on contrastive 
+             learning. Our system can also be extended to allow fine-grained style control of individual body parts. We demonstrate an extensive set 
+             of examples showing the flexibility and generalizability of our model to a variety of style descriptions. In a user study, we show that 
+             our system outperforms the state-of-the-art approaches regarding human likeness, appropriateness, and style correctness.        
+            </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+
+      <div class="column is-centered has-text-centered">
+        <img src="static/figures/system_overview.png" alt="cars peace"
+        width="600"/>
+      </div>
+  </div>
+</div>
+</div>
+</section>
+
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+<!--         <h2 class="title is-3">How does it work?</h2> -->
+        <div class="content has-text-justified">
+          <p>
+            GestureDiffuCLIP takes the audio and transcript of a speech as input,
+            synthesizing realistic, stylized full-body gestures that align with
+            the speech content rhythmically and semantically. It allows using
+            a short piece of text, namely a <i>text prompt</i>, a video clip, namely a
+            <i>video prompt</i>, or a motion sequence, namely a <i>motion prompt</i>, to
+            describe a desired style. The gestures are then generated to embody
+            the style as much as possible. And furthermore, our system can be
+            extended to achieve style control of individual body parts through
+            noise combination. 
+          </p>
+        </div>
+        <div class="content has-text-justified">
+          <p>
+            We conduct an extensive set of experiments
+            to evaluate our framework. Our system outperforms all baselines
+            both qualitatively and quantitatively, as evidenced by FGD, SRGR,
+            SC, and SRA metrics, and user study results. 
+        </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section> 
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Control With MultiModal Prompts</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our system accepts text,
+            motion, and video prompts as style descriptors 
+            and successfully generates realistic gestures with
+            reasonable styles, as required by the corresponding prompts.
+            Some of the results are as follows.
+          </p>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section> 
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="column is-centered has-text-centered">
+    <h3 class="title is-4">Text Prompt</h3>
+      <div id="results-carousel" class="carousel results-carousel">
+      <div class="column is-centered has-text-centered">
+        <p><b>Text Prompt: “the person is <font color="red">angry</font>.”</b></p>
+
+                <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/text_prompt/angry.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+      <div class="column is-centered has-text-centered">
+      	<p><b> Text Prompt: “the person is <font color="red">happy</font> and <font color="red">excited</font>.”</b></p>
+
+                <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/text_prompt/happy.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+        <div class="column is-centered has-text-centered">
+      	<p><b> Text Prompt: “the person is <font color="red">sad</font>.”</b></p>
+
+                <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/text_prompt/sad.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+            <div class="column is-centered has-text-centered">
+      	<p><b> Text Prompt: “a person is <font color="red">holding a cup of coffee in the right hand</font>.”</b></p>
+
+                <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/text_prompt/hold.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+            <div class="column is-centered has-text-centered">
+      	<p><b> Text Prompt: “the person is <font color="red">playing the guitar</font>.”</b></p>
+
+                <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/text_prompt/guitar.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+            <div class="column is-centered has-text-centered">
+      	<p><b> Text Prompt: “standing like a <font color="red">boxer</font>.”</b></p>
+
+                <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/text_prompt/boxer.mp4"
+          type="video/mp4">
+        </video>
+  </div>
+</div>
+</div>
+</section>
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="column is-centered has-text-centered">
+    <h3 class="title is-4">Video Prompt</h3>
+    <p><b> (The left video is the video prompt, and the right video shows the results.)</b></p>
+
+    <div id="results-carousel" class="carousel results-carousel">
+        
+      <div class="column is-centered has-text-centered">
+            <video poster="" id="tree" autoplay controls width=300>
+              <source src="static/figures/video_prompt/hiphop.mp4"
+              type="video/mp4">
+            </video>
+            <video poster="" id="tree" autoplay controls width=300>
+              <source src="static/figures/video_prompt/hiphop-video-prompt.mp4"
+              type="video/mp4">
+            </video>
+            <p><b>Video Prompt: “a dance of <font color="red">hip-hop style</font>.”</b></p>
+            </br>
+      </div>
+
+      <div class="column is-centered has-text-centered">
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/yoga1.mp4"
+          type="video/mp4">
+        </video>
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/yoga1_final_0001-0463.mp4"
+          type="video/mp4">
+        </video>
+        <p><b>Video Prompt: “a <font color="red">yoga</font> gesture.”</b></p>
+        </br>
+      </div>
+
+      <div class="column is-centered has-text-centered">
+            <video poster="" id="tree" autoplay controls width=300>
+              <source src="static/figures/video_prompt/yoga.mp4"
+              type="video/mp4">
+            </video>
+            <video poster="" id="tree" autoplay controls width=300>
+              <source src="static/figures/video_prompt/yoga2_final_0001-0463.mp4"
+              type="video/mp4">
+            </video>
+            <p><b>Video Prompt: “a <font color="red">yoga</font> gesture.”</b></p>
+            </br>
+      </div>
+
+      <div class="column is-centered has-text-centered">
+            <video poster="" id="tree" autoplay controls width=300>
+              <source src="static/figures/video_prompt/bird.mp4"
+              type="video/mp4">
+            </video>
+            <video poster="" id="tree" autoplay controls width=300>
+              <source src="static/figures/video_prompt/bird_final1_0001-0445.mp4"
+              type="video/mp4">
+            </video>
+            <p><b>Video Prompt: “a bird <font color="red">flaps wings</font> in flight.”</b></p>
+            </br>
+      </div>
+
+      <div class="column is-centered has-text-centered">
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/wind.mp4"
+          type="video/mp4">
+        </video>
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/wind_video.mp4"
+          type="video/mp4">
+        </video>
+        <p><b>Video Prompt: “trees <font color="red">sway</font> with the wind.”</b></p>
+        </br>
+      </div>
+
+      <div class="column is-centered has-text-centered">
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/fire.mp4"
+          type="video/mp4">
+        </video>
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/fire_final_new0001-0438.mp4"
+          type="video/mp4">
+        </video>
+        <p><b>Video Prompt: “flames <font color="red">burn</font> in the fireplace.”</b></p>
+        </br>
+      </div>
+
+      <div class="column is-centered has-text-centered">
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/dinosaur.mp4"
+          type="video/mp4">
+        </video>
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/dinosaur_final_0001-0438.mp4"
+          type="video/mp4">
+        </video>
+        <p><b>Video Prompt: “a standing <font color="red">dinosaur</font>.”</b></p>
+        </br>
+      </div>
+
+      <div class="column is-centered has-text-centered">
+        <video poster="" id="tree" autoplay controls width=170>
+          <source src="static/figures/video_prompt/lightning.mp4"
+          type="video/mp4">
+        </video>
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/video_prompt/lightning_final_0001-0445.mp4"
+          type="video/mp4">
+        </video>
+        <p><b>Video Prompt: “<font color="red">lightning</font> descends from the sky.”</b></p>
+        </br>
+      </div>
+</div>
+</div>
+</section>
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="column is-centered has-text-centered">
+    <h3 class="title is-4">Motion Prompt</h3>
+    <p><b> (The left video is the motion prompt, and the right video shows the results.)</b></p>
+
+    <div id="results-carousel" class="carousel results-carousel">
+        
+      <div class="column is-centered has-text-centered">
+            <video poster="" id="tree" autoplay controls width=250>
+              <source src="static/figures/motion_prompt/motion_prompt.mp4"
+              type="video/mp4">
+            </video>
+            <video poster="" id="tree" autoplay controls width=300>
+              <source src="static/figures/motion_prompt/neutral.mp4"
+              type="video/mp4">
+            </video>
+            <p><b>Motion Prompt: “<font color="red">high right hand</font> and <font color="red">low left hand</font>.”</b></p>
+            </br>
+      </div>
+
+      <div class="column is-centered has-text-centered">
+        <video poster="" id="tree" autoplay controls width=250>
+          <source src="static/figures/motion_prompt/sit_prompt.mp4"
+          type="video/mp4">
+        </video>
+        <video poster="" id="tree" autoplay controls width=300>
+          <source src="static/figures/motion_prompt/sit.mp4"
+          type="video/mp4">
+        </video>
+        <p><b>Motion Prompt: “<font color="red">sitting</font>.”</b></p>
+        </br>
+      </div>
+
+</div>
+</div>
+</section>
+
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Body Part-Level Style Control</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our system allows fine-grained styles control on individual body parts by using noise
+            combination. We employ different prompts to control the styles
+            of various body parts. The resulting motions produce these styles
+            while maintaining a natural coordination among the body parts.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section> 
+
+
+
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+      <div class="column is-centered has-text-centered">
+          <img src="static/figures/sub_body/1.png" alt="cars peace"
+          width="250"/>
+                <video poster="" id="tree" autoplay controls width=500>
+          <source src="static/figures/sub_body/video_01.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+      <div class="column is-centered has-text-centered">
+        <img src="static/figures/sub_body/2.png" alt="cars peace"
+        width="250"/>
+              <video poster="" id="tree" autoplay controls width=500>
+        <source src="static/figures/sub_body/video_02.mp4"
+        type="video/mp4">
+      </video>
+    </div>
+    <div class="column is-centered has-text-centered">
+      <img src="static/figures/sub_body/3.png" alt="cars peace"
+      width="250"/>
+            <video poster="" id="tree" autoplay controls width=500>
+      <source src="static/figures/sub_body/video_03.mp4"
+      type="video/mp4">
+    </video>
+  </div>
+  <div class="column is-centered has-text-centered">
+    <img src="static/figures/sub_body/4.png" alt="cars peace"
+    width="250"/>
+          <video poster="" id="tree" autoplay controls width=500>
+    <source src="static/figures/sub_body/video_04.mp4"
+    type="video/mp4">
+  </video>
+</div>
+</div>
+</div>
+</section>
+
+
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Gesture Editing with LLM</h2>
+        <div class="content has-text-justified">
+          <p>
+            We demonstrate that our system can effectively enhance co-speech
+            gestures by specifying style prompts for each speech sentence and
+            using these prompts to guide the character's performance. We can
+            further automate this process by employing a large language model
+            like ChatGPT, enabling a skillful storyteller.
+          </p>
+        </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section> 
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div class="column is-centered has-text-centered">
+      	<p><b>(The highlighted yellow text is the guidance added by LLM for actions.)</b></p>
+      <div id="results-carousel" class="carousel results-carousel">
+      
+      <div class="column is-centered has-text-centered">
+         <video poster="" id="tree" autoplay controls width=800>
+          <source src="static/figures/chatgpt/gpt1.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+      <div class="column is-centered has-text-centered">
+         <video poster="" id="tree" autoplay controls width=800>
+          <source src="static/figures/chatgpt/gpt2.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+      <div class="column is-centered has-text-centered">
+         <video poster="" id="tree" autoplay controls width=800>
+          <source src="static/figures/chatgpt/gpt3.mp4"
+          type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+
+
+<section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>
+    @misc{ao2023gesturediffuclip,
+      title         = {GestureDiffuCLIP: Gesture Diffusion Model with CLIP Latents}, 
+      author        = {Tenglong Ao and Zeyi Zhang and Libin Liu},
+      year          = {2023},
+      eprint        = {2303.14613},
+      archivePrefix = {arXiv},
+      primaryClass  = {cs.CV}
+    }</code></pre>
+    </div>
+</section>
+
+
+
+
+<footer class="footer">
+ <!--  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+      href="https://homes.cs.washington.edu/~kpar/nerfies/videos/nerfies_paper.pdf">
+      <i class="fas fa-file-pdf"></i>
+    </a>
+    <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+      <i class="fab fa-github"></i>
+    </a>
+  </div> -->
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content">
+        <p>
+          This website is licensed under a <a rel="license"
+          href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+        Commons Attribution-ShareAlike 4.0 International License</a>.
+      </p>
+      <p>
+        Website source code based on the <a href="https://nerfies.github.io/"> Nerfies</a> project page. If you want to reuse their <a
+        href="https://github.com/nerfies/nerfies.github.io">source code</a>, please credit them appropriately.
+      </p>
+    </div>
+  </div>
+</div>
+</div>
+</footer>
+
+
+  <script type="text/javascript">
+    var sc_project=12351448; 
+    var sc_invisible=1; 
+    var sc_security="c676de4f"; 
+  </script>
+  <script type="text/javascript"
+  src="https://www.statcounter.com/counter/counter.js"
+  async></script>
+  <noscript><div class="statcounter"><a title="Web Analytics"
+    href="https://statcounter.com/" target="_blank"><img
+    class="statcounter"
+    src="https://c.statcounter.com/12351448/0/c676de4f/1/"
+    alt="Web Analytics"></a></div></noscript>
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
